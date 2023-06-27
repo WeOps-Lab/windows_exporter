@@ -19,11 +19,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/alecthomas/kingpin/v2"
 	"github.com/prometheus-community/windows_exporter/collector"
 	"github.com/prometheus-community/windows_exporter/config"
-	"github.com/yusufpapurcu/wmi"
+	wmi "github.com/yusufpapurcu/wmi"
 
-	"github.com/alecthomas/kingpin/v2"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -44,7 +44,7 @@ type prometheusVersion struct {
 }
 
 const (
-	defaultCollectors            = "cpu,cs,logical_disk,net,os,service,system,textfile"
+	defaultCollectors            = "iis"
 	defaultCollectorsPlaceholder = "[defaults]"
 )
 
