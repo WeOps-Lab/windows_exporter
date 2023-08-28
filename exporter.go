@@ -44,7 +44,7 @@ type prometheusVersion struct {
 }
 
 const (
-	defaultCollectors            = "iis"
+	defaultCollectors            = "ad"
 	defaultCollectorsPlaceholder = "[defaults]"
 )
 

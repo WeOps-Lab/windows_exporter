@@ -8,11 +8,12 @@ import (
 
 	"github.com/prometheus-community/windows_exporter/log"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/yusufpapurcu/wmi"
+	wmi "github.com/yusufpapurcu/wmi"
 )
 
 // A ADCollector is a Prometheus collector for WMI Win32_PerfRawData_DirectoryServices_DirectoryServices metrics
 type ADCollector struct {
+	Up                                                  *prometheus.Desc
 	AddressBookOperationsTotal                          *prometheus.Desc
 	AddressBookClientSessions                           *prometheus.Desc
 	ApproximateHighestDistinguishedNameTag              *prometheus.Desc
@@ -80,6 +81,12 @@ type ADCollector struct {
 func newADCollector() (Collector, error) {
 	const subsystem = "ad"
 	return &ADCollector{
+		Up: prometheus.NewDesc(
+			prometheus.BuildFQName(Namespace, subsystem, "up"),
+			"ad up status",
+			nil,
+			nil,
+		),
 		AddressBookOperationsTotal: prometheus.NewDesc(
 			prometheus.BuildFQName(Namespace, subsystem, "address_book_operations_total"),
 			"",
@@ -618,8 +625,19 @@ func (c *ADCollector) collect(ch chan<- prometheus.Metric) (*prometheus.Desc, er
 		return nil, err
 	}
 	if len(dst) == 0 {
+		ch <- prometheus.MustNewConstMetric(
+			c.Up,
+			prometheus.GaugeValue,
+			float64(0),
+		)
 		return nil, errors.New("WMI query returned empty result set")
 	}
+
+	ch <- prometheus.MustNewConstMetric(
+		c.Up,
+		prometheus.GaugeValue,
+		float64(1),
+	)
 
 	ch <- prometheus.MustNewConstMetric(
 		c.AddressBookOperationsTotal,
