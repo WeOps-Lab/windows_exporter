@@ -19,6 +19,7 @@ const (
 )
 
 type exchangeCollector struct {
+	Up                                      *prometheus.Desc
 	LDAPReadTime                            *prometheus.Desc
 	LDAPSearchTime                          *prometheus.Desc
 	LDAPWriteTime                           *prometheus.Desc
@@ -106,6 +107,7 @@ func newExchangeCollector() (Collector, error) {
 	}
 
 	c := exchangeCollector{
+		Up:                                      desc("up", "Windows exchange exporter collect status (0 = error, 1 = success)"),
 		RPCAveragedLatency:                      desc("rpc_avg_latency_sec", "The latency (sec), averaged for the past 1024 packets"),
 		RPCRequests:                             desc("rpc_requests", "Number of client requests currently being processed by  the RPC Client Access service"),
 		ActiveUserCount:                         desc("rpc_active_user_count", "Number of unique users that have shown some kind of activity in the last 2 minutes"),
@@ -202,9 +204,21 @@ func (c *exchangeCollector) Collect(ctx *ScrapeContext, ch chan<- prometheus.Met
 	for _, collectorName := range c.enabledCollectors {
 		if err := collectorFuncs[collectorName](ctx, ch); err != nil {
 			log.Errorf("Error in %s: %s", collectorName, err)
+			ch <- prometheus.MustNewConstMetric(
+				c.Up,
+				prometheus.GaugeValue,
+				float64(0),
+			)
 			return err
 		}
 	}
+
+	ch <- prometheus.MustNewConstMetric(
+		c.Up,
+		prometheus.GaugeValue,
+		float64(1),
+	)
+
 	return nil
 }
 
