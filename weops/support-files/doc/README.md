@@ -65,8 +65,8 @@ Exchange exporter采集目前只可以设置日志级别参数，直接下发到
 | windows_exchange_http_proxy_mailbox_proxy_failure_rate             | Exchange邮箱代理失败率                  | service_name | 服务名称     | percent  |
 | windows_exchange_activesync_ping_cmds_pending                      | Exchange待处理的Ping命令数              | -            | -            | -        |
 | windows_exchange_activesync_sync_cmds_total                        | Exchange每秒处理的同步命令数            | -            | -            | -        |
-| windows_exchange_avail_service_requests_per_sec                    | Exchange当前唯一登录用户数              | -            | -            | -        |
-| windows_exchange_owa_current_unique_users                          |                                         | -            | -            | -        |
+| windows_exchange_avail_service_requests_per_sec                    | Exchange每秒服务请求数                  | -            | -            | -        |
+| windows_exchange_owa_current_unique_users                          | Exchange当前唯一登录用户数              | -            | -            | -        |
 | windows_exchange_owa_requests_total                                | Exchange每秒处理的Outlook Web App请求数 | -            | -            | -        |
 | windows_exchange_autodiscover_requests_total                       | Exchange每秒处理的自动发现请求数        | -            | -            | -        |
 | windows_exporter_collector_duration_seconds                        | Exchange监控探针采集持续时间            | collector    | 采集目标     | s        |
